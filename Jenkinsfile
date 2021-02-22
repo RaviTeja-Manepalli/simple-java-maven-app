@@ -4,12 +4,19 @@ pipeline {
         maven 'Maven'
         jdk 'JDK'
     }
+    
     stages {
-        stage('Build') {
+                stage('build && SonarQube analysis') {
             steps {
-                bat 'mvn -B -DskipTests clean package'
+                withSonarQubeEnv('My SonarQube Server') {
+                    // Optionally use a Maven environment you've configured already
+                    withMaven(maven:'Maven 3.5') {
+                        sh 'mvn clean package sonar:sonar'
+                    }
+                }
             }
         }
+
         stage('Test') { 
             steps {
                 bat 'mvn test' 
