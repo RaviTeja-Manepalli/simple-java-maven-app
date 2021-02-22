@@ -8,9 +8,9 @@ pipeline{
           stage("build & SonarQube analysis") {
             agent any
             steps {
-              withSonarQubeEnv('sonar') {
+              withSonarQubeEnv('sonarcloud') {
                 bat 'java -version'
-                bat 'mvn clean package sonar:sonar'
+                bat 'mvn clean package sonar:sonarcloud'
               }
             }
           }
