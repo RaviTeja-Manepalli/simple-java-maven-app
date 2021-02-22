@@ -10,7 +10,7 @@ pipeline{
             steps {
               withSonarQubeEnv('sonarcloud') {
                 bat 'java -version'
-                bat 'mvn clean package sonar:sonarcloud'
+                bat 'mvn clean package sonar:sonar'
               }
             }
           }
