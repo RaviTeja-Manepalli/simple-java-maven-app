@@ -1,31 +1,19 @@
-pipeline {
-    agent any
-    tools{
-        maven 'Maven'
-        jdk 'JDK'
-
+pipeline{
+   agent {
+    docker {
+      image 'maven:3.6.3-jdk-11'
+      args '-v /root/.m2:/root/.m2'
     }
-    
-    stages {
-                stage('build && SonarQube analysis') {
+  }
+  stages {
+          stage("build & SonarQube analysis") {
+            agent any
             steps {
-                withSonarQubeEnv('sonar') {
-                    // Optionally use a Maven environment you've configured already
-                        bat 'mvn clean package sonar:sonar'
-                    
-                }
+              withSonarQubeEnv('sonar-server') {
+                sh 'java -version'
+                sh 'mvn clean package sonar:sonar'
+              }
             }
-        }
-
-        stage('Test') { 
-            steps {
-                bat 'mvn test' 
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml' 
-                }
-            }
-        }
+          }
     }
 }
