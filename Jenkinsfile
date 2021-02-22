@@ -1,14 +1,18 @@
 pipeline {
     agent any
+    tools{
+        maven 'Maven'
+        jdk 'JDK'
+
+    }
     
     stages {
                 stage('build && SonarQube analysis') {
             steps {
                 withSonarQubeEnv('sonar') {
                     // Optionally use a Maven environment you've configured already
-                    withMaven(maven:'Maven') {
                         bat 'mvn clean package sonar:sonar'
-                    }
+                    
                 }
             }
         }
